@@ -1,7 +1,9 @@
 use crate::wsdl::{parse, SimpleType, Type, Wsdl};
 use case::CaseExt;
 use proc_macro2::{Ident, Literal, Span, TokenStream};
+use std::io::{Error, ErrorKind};
 use std::{fs::File, io::Write};
+use tokio::runtime::Runtime;
 
 pub trait ToElements {
     fn to_elements(&self) -> Vec<xmltree::Element>;
@@ -43,11 +45,21 @@ impl From<std::io::Error> for GenError {
     }
 }
 
-pub fn gen_write(path: &str, out: &str) -> Result<(), ()> {
+pub fn gen_write(path: &str, out: &str) -> Result<(), Error> {
     let out_path = format!("{}/example.rs", out);
-    let v = std::fs::read(path).unwrap();
-    let mut output = File::create(out_path).unwrap();
-    let wsdl = parse(&v[..]).unwrap();
+    let rt = Runtime::new()?;
+    let v = if path.starts_with("http://") || path.starts_with("https://") {
+        let handle = rt.handle();
+        handle
+            .block_on(async { reqwest::get(path).await?.bytes().await })
+            .or(Err(Error::new(ErrorKind::Other, "request failed")))
+    } else {
+        std::fs::read(path).map(|value| value.into())
+    };
+    println!("vsdf {}", String::from_utf8_lossy(&(v.as_ref().unwrap())[..]));
+    let mut output = File::create(out_path)?;
+    
+    let wsdl = parse(&v?[..]).unwrap();
     let generated = gen(&wsdl).unwrap();
     output.write_all(generated.as_bytes()).unwrap();
     output.flush().unwrap();

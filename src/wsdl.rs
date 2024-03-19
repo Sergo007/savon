@@ -85,11 +85,10 @@ fn split_namespace(s: &str) -> &str {
     }
 }
 
-pub fn parse(bytes: &[u8]) -> Result<Wsdl, WsdlError> {
+pub fn parse<B: std::io::Read> (bytes: B) -> Result<Wsdl, WsdlError> {
     let mut types = HashMap::new();
     let mut messages = HashMap::new();
     let mut operations = HashMap::new();
-
     let elements = Element::parse(bytes)?;
     trace!("elements: {:#?}", elements);
     let target_namespace = elements
@@ -108,7 +107,7 @@ pub fn parse(bytes: &[u8]) -> Result<Wsdl, WsdlError> {
         .ok_or(WsdlError::Empty)?;
 
     for elem in types_el.children.iter().filter_map(|c| c.as_element()) {
-        trace!("type: {:#?}", elem);
+        println!("type: {:#?}", elem);
         let name = elem
             .attributes
             .get("name")

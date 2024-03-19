@@ -1,8 +1,8 @@
 [package]
 name = "savon"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Geoffroy Couprie <contact@geoffroycouprie.com>"]
-edition = "2018"
+edition = "2021"
 description = "reserved"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/netwo-io/savon"
@@ -17,7 +17,9 @@ chrono = "0.4"
 quote = "1.0"
 proc-macro2 = "1.0"
 case = "^1.0"
-reqwest = "0.10"
+reqwest = "0.11.26"
+tokio = { version = "1.36.0", features = ["rt-multi-thread"] }
+
 
 [workspace]
 members = [ "savon-test" ]
