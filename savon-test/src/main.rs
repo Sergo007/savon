@@ -2,7 +2,8 @@
 extern crate log;
 
 mod soap {
-    include!(concat!(env!("OUT_DIR"), "/example.rs"));
+    // include!(concat!(env!("OUT_DIR"), "/example.rs"));
+    include!("../example.rs");
 }
 
 #[tokio::main]
@@ -10,7 +11,7 @@ async fn main() -> Result<(), savon::Error> {
     pretty_env_logger::init();
 
     let base_url = "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso";
-    info!("Hello, world!");
+    println!("Hello, world!");
 
     let client = soap::CountryInfoService::new(base_url.to_string());
 
@@ -20,7 +21,7 @@ async fn main() -> Result<(), savon::Error> {
         ))
         .await?;
 
-    info!("res: {:?}", res);
+    println!("res: {:?}", res);
 
     Ok(())
 }

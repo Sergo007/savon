@@ -12,14 +12,14 @@ keywords = ["soap"]
 
 [dependencies]
 log = "0.4"
-xmltree = "0.10"
+xmltree = "0.11"
 chrono = "0.4"
 quote = "1.0"
 proc-macro2 = "1.0"
 case = "^1.0"
-reqwest = "0.11.26"
-tokio = { version = "1.36.0", features = ["rt-multi-thread"] }
+reqwest = "0.12.8"
+tokio = { version = "1.40.0", features = ["rt-multi-thread"] }
 
 
 [workspace]
-members = [ "savon-test" ]
+members = ["savon-test"]

@@ -56,9 +56,12 @@ pub fn gen_write(path: &str, out: &str) -> Result<(), Error> {
     } else {
         std::fs::read(path).map(|value| value.into())
     };
-    println!("vsdf {}", String::from_utf8_lossy(&(v.as_ref().unwrap())[..]));
+    println!(
+        "vsdf {}",
+        String::from_utf8_lossy(&(v.as_ref().unwrap())[..])
+    );
     let mut output = File::create(out_path)?;
-    
+
     let wsdl = parse(&v?[..]).unwrap();
     let generated = gen(&wsdl).unwrap();
     output.write_all(generated.as_bytes()).unwrap();
@@ -462,6 +465,6 @@ mod tests {
         let res = gen(&wsdl).unwrap();
 
         println!("generated:\n{}", res);
-        panic!();
+        // panic!();
     }
 }

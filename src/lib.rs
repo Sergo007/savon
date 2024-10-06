@@ -1,3 +1,5 @@
+#![allow(dead_code, unused_imports, unused_variables)]
+
 #[macro_use]
 extern crate log;
 extern crate proc_macro;
